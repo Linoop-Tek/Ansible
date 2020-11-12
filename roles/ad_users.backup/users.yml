@@ -1,6 +1,0 @@
----
-- name: Creating PXE Boot Server
-  hosts: win
-  gather_facts: no
-  roles:
-   - { role: ad_users }
