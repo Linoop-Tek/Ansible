@@ -1,5 +1,5 @@
 ---
-- name: Creating PXE Boot Server
+- name: Role for Active Directory Users 
   hosts: win
   gather_facts: no
   roles:

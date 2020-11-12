@@ -2,6 +2,6 @@
 192.168.10.15
 [win:vars]
 ansible_user=Administrator
-ansible_password=N0passw0rd
+ansible_password= "Add your password here"
 ansible_connection=winrm
 ansible_winrm_server_cert_validation=ignore
