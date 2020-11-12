@@ -1,0 +1,11 @@
+allow booting;
+allow bootp;
+authoritative;
+# A slightly different configuration for an internal subnet.
+subnet {{ ansible_default_ipv4.network }} netmask {{ ansible_default_ipv4.netmask }} {
+    range {{ range }};
+    default-lease-time 600;
+    max-lease-time 7200;
+    next-server {{ ansible_default_ipv4.address }};
+    filename "pxelinux.0";
+}

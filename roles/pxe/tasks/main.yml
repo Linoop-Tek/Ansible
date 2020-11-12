@@ -1,0 +1,44 @@
+---
+# tasks file for pxe
+- name: Installing Required Packages
+  yum:
+    name: '{{ item.name }}'
+    state: '{{ item.state }}'
+  loop: '{{ packages }}'
+
+- name: Mount DVD read-only
+  mount:
+    path: /mnt/
+    src: /dev/sr0
+    fstype: iso9660
+    opts: loop
+    state: mounted
+
+- name: Creating Directories
+  file:
+    path: /var/lib/tftpboot/pxelinux.cfg
+    state: directory
+    
+- name: Copy required files
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    remote_src: '{{ item.remote_src }}'
+  loop: '{{ copy }}'
+
+- name: Copying Important files
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+  loop: '{{ template }}'
+
+- name: Managing Services
+  systemd:
+    name: '{{ item.name }}'
+    state: '{{ item.state }}'
+    enabled: '{{ item.enabled }}'
+  loop: '{{ services }}'
+
+- name: Disabling Selinux
+  selinux:
+    state: disabled

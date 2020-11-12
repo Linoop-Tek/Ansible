@@ -1,0 +1,20 @@
+lang en_US
+keyboard us
+timezone America/New_York --isUtc
+rootpw $1$9ziGCBg+$TlC2rwn.2YOOcHjRXrklf. --iscrypted
+#platform x86, AMD64, or Intel EM64T
+reboot
+text
+url --url=ftp://{{ ansible_default_ipv4.address }}/pub
+bootloader --location=mbr --append="rhgb quiet crashkernel=auto"
+zerombr
+clearpart --all --initlabel
+autopart
+auth --passalgo=sha512 --useshadow
+selinux --disabled
+firewall --disabled
+firstboot --disable
+%packages
+@^minimal
+@web-server
+%end

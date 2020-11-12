@@ -1,0 +1,30 @@
+---
+# vars file for pxe
+# - { name: "", state: "" }
+packages:
+  - { name: "epel-release", state: "present" } 
+  - { name: "*", state: "latest" }
+  - { name: "dhcp", state: "latest" }
+  - { name: "vsftpd", state: "latest" }
+  - { name: "xinetd", state: "latest" }
+  - { name: "tftp-server", state: "latest" }
+  - { name: "syslinux", state: "latest" }
+  - { name: "system-config-kickstart", state: "latest" }
+
+services:
+  - { name: "dhcpd", state: "started", enabled: "yes" }
+  - { name: "vsftpd", state: "started", enabled: "yes" }
+  - { name: "tftp", state: "started", enabled: "yes" }
+  - { name: "xinetd", state: "started", enabled: "yes" }
+  - { name: "firewalld", state: "stopped", enabled: "no"}
+
+copy:
+  - { src: "/mnt/isolinux/", dest: "/var/lib/tftpboot", remote_src: "yes"}
+  - { src: "/usr/share/syslinux/pxelinux.0", dest: "/var/lib/tftpboot", remote_src: "yes"}
+  - { src: "/mnt/", dest: "/var/ftp/pub/", remote_src: "yes"}
+
+template:
+  - { src: "default.j2", dest: "/var/lib/tftpboot/pxelinux.cfg/default" }
+  - { src: "dhcpd.conf.j2", dest: "/etc/dhcp/dhcpd.conf" }
+  - { src: "ks.cfg.j2", dest: "/var/ftp/pub/ks.cfg" }
+  - { src: "tftp.j2", dest: "/etc/xinetd.d/tftp" }

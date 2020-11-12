@@ -1,0 +1,22 @@
+---
+# tasks file for ad_users
+- name: Ensure users are present in AD
+  win_domain_user:
+    name: '{{ item.name }}'
+    firstname: '{{ item.firstname }}'
+    surname: '{{ item.surname }}'
+    company: Linoop
+    password: Welcome123! 
+    password_updated: yes
+    password_expired: no
+    user_cannot_change_password: yes
+    state: present
+    groups:
+      - Domain Users
+    email: '{{ item.email }}'
+    street: Linoop St. 
+    city: Brooklyn
+    state_province: NY
+    postal_code: 11230
+    country: US
+  with_items: '{{ ad_users }}'
