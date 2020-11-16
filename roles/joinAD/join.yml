@@ -1,0 +1,5 @@
+---
+- name: Joining AD
+  hosts: all
+  roles:
+   - /var/lib/awx/projects/joinAD

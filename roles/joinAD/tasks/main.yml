@@ -1,0 +1,51 @@
+---
+# tasks file for joinAD
+      - name: Installing required packages
+        yum:
+          name: epel-release
+          state: latest
+
+      - name: Installing required packages
+        yum:
+          name:
+          - sssd
+          - realmd
+          - oddjob
+          - oddjob-mkhomedir
+          - adcli
+          - samba-common
+          - samba-common-tools
+          - krb5-workstation
+          - openldap-clients
+          - policycoreutils-python
+          - expect
+          - python-pip
+          state: present
+
+      - name: Install pexpect library
+        pip:
+          name: pexpect
+          state: present
+
+      - name: Adding a line in hosts file
+        lineinfile:
+          path: /etc/hosts
+          line: 192.168.10.15   dc1.linoop.us   dc   linoop.us
+          create: yes
+
+      - name: Join linux into domain
+        expect:
+          command: "realm join dc1.linoop.us -U connect"
+          responses:
+            (?i)Password for connect: "Welcome123!"
+
+      - name: Copying sssd.conf
+        template:
+          src: files/sssd.conf.j2
+          dest: /etc/sssd/sssd.conf
+
+      - name: Restarting the sssd
+        systemd:
+          name: sssd
+          state: restarted
+          enabled: yes
